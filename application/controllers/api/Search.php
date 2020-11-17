@@ -14,18 +14,40 @@ class Search extends RestController
     {
         $query = $this->get('q');
         if ($query === null) {
-            $users = $this->search->getUsers();
-            $resultCount = $this->search->countUsers();
+            $this->response([
+                'message' => 'Validation Failed',
+                'errors' => ([
+                    'resource' => 'Search',
+                    'field' => 'q',
+                    'code' => 'missing'
+                ]),
+                'hint' => 'check the url'
+            ], 422);
         } else {
             $users = $this->search->getUsers($query);
             $resultCount = $this->search->countUsers($query);
         }
 
         if ($users) {
+            foreach ($users as $user) {
+                // var_dump($user['id']);
+                $data = ([
+                    'id' => $user->id,
+                    'no_induk' => $user->no_induk,
+                    'nama' => $user->nama,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'gender' => $user->gender,
+                    'tempat_lahir' => $user->tempat_lahir,
+                    'tgl_lahir' => $user->tgl_lahir,
+                    'alamat' => $user->alamat,
+                    'user_created' => $user->user_created
+                ]);
+            }
             $this->response([
-                'status' => true,
-                'result_count' => $resultCount,
-                'result' => $users
+                'total_count' => $resultCount,
+                'items' => $data
             ], 200);
         } else {
             $this->response([

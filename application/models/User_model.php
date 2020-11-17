@@ -6,10 +6,8 @@ class User_model extends CI_Model
 
     public function getUser($id = null)
     {
-        if ($id === null) {
-            return $this->db->get($this->_table)->result_array();
-        } else {
-            return $this->db->get_where($this->_table, ['id' => $id])->result_array();
+        if ($id !== null) {
+            return $this->db->get_where($this->_table, ['id' => $id])->row();
         }
     }
 
@@ -21,8 +19,17 @@ class User_model extends CI_Model
 
     public function createUser($data)
     {
-        $this->db->insert($this->_table, $data);
-        return $this->db->affected_rows();
+        // $this->db->insert($this->_table, $data);
+        // return $this->db->affected_rows();
+        return 1;
+    }
+
+    public function forgottPassword($email, $token)
+    {
+        // $this->db->set('forgotten_password_code', $token);
+        // $this->db->where('email', $email);
+        // $this->db->update('tbl_user');
+        return 1;
     }
 
     public function updateUser($data, $id)

@@ -14,94 +14,86 @@ class Users extends RestController
     {
         $id = $this->get('id');
         if ($id === null) {
-            $user = $this->user->getUser();
+            $this->response([
+                'message' => 'Not Found',
+                'hint' => 'try users/{username}'
+            ], 404);
         } else {
             $user = $this->user->getUser($id);
         }
 
         if ($user) {
             $this->response([
-                'status' => true,
-                'result' => $user
+                'id' => $user->id,
+                'no_induk' => $user->no_induk,
+                'nama' => $user->nama,
+                'username' => $user->username,
+                'email' => $user->email,
+                'phone' => $user->phone,
+                'gender' => $user->gender,
+                'tempat_lahir' => $user->tempat_lahir,
+                'tgl_lahir' => $user->tgl_lahir,
+                'alamat' => $user->alamat,
+                'user_created' => $user->user_created
             ], 200);
         } else {
             $this->response([
-                'status' => false,
                 'message' => 'id not found'
             ], 404);
         }
     }
 
-    public function index_delete()
-    {
-        $id = $this->delete('id');
+    // public function index_delete()
+    // {
+    //     $id = $this->delete('id');
 
-        if ($id === null) {
-            $this->response([
-                'status' => false,
-                'message' => 'provides an id!'
-            ], 400);
-        } else {
-            if ($this->user->deleteUser($id) > 0) {
-                // OK
-                $this->response([
-                    'status' => true,
-                    'id' => $id,
-                    'message' => 'deleted'
-                ], 200);
-            } else {
-                // id not found
-                $this->response([
-                    'status' => false,
-                    'message' => 'id not found!'
-                ], 400);
-            }
-        }
-    }
+    //     if ($id === null) {
+    //         $this->response([
+    //             'status' => false,
+    //             'message' => 'provides an id!'
+    //         ], 400);
+    //     } else {
+    //         if ($this->user->deleteUser($id) > 0) {
+    //             // OK
+    //             $this->response([
+    //                 'status' => true,
+    //                 'id' => $id,
+    //                 'message' => 'deleted'
+    //             ], 200);
+    //         } else {
+    //             // id not found
+    //             $this->response([
+    //                 'status' => false,
+    //                 'message' => 'id not found!'
+    //             ], 400);
+    //         }
+    //     }
+    // }
 
-    public function index_post()
-    {
-        $data = [
-            'nama' => $this->post('nama', TRUE),
-            'username' => $this->post('username', TRUE),
-            'email' => $this->post('email', TRUE),
-            'phone' => $this->post('phone', TRUE),
-            'password' => md5($this->post('password', TRUE)),
-        ];
+    // public function index_put()
+    // {
+    //     $id = $this->put('id');
+    //     $data = [
+    //         'no_induk' => $this->put('o_induk'),
+    //         'nama' => $this->put('nama'),
+    //         // 'username' => $this->put('username'),
+    //         'email' => $this->put('email'),
+    //         'tempat_lahir' => $this->put('tempat_lahir'),
+    //         'tgl_lahir' => $this->put('tgl_lahir'),
+    //         'alamat' => $this->put('alamat'),
+    //         'role' => $this->put('role')
+    //     ];
 
-        if ($this->user->createUser($data) > 0) {
-            $this->response([
-                'status' => true,
-                'message' => 'new user has been created'
-            ], 201);
-        } else {
-            $this->response([
-                'status' => false,
-                'message' => 'failed to create new data!'
-            ], 400);
-        }
-    }
-
-    public function index_put()
-    {
-        $id = $this->put('id');
-        $data = [
-            'nama' => $this->put('nama'),
-            'username' => $this->put('username'),
-            'email' => $this->put('email'),
-            'phone' => $this->put('phone')
-        ];
-
-        if ($this->user->updateUser($data, $id) > 0) {
-            $this->response([
-                'status' => true,
-                'message' => 'data user has been updated'
-            ], 200);
-        } else {
-            $this->response([
-                'status' => false,
-                'message' => 'failed to update new data!'
-            ], 400);
-        }
-    }
+    //     if ($this->user->updateUser($data, $id) > 0) {
+    //         $this->response([
+    //             'status' => true,
+    //             'message' => 'data user has been updated'
+    //         ], 200);
+    //     } else {
+    //         $this->response([
+    //             'status' => false,
+    //             'message' => 'failed to update new data!'
+    //         ], 400);
+    //     }
+    // }
 }
