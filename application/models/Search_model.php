@@ -13,22 +13,25 @@ class Search_model extends CI_Model
             $this->db->from($this->tabelUser);
             $this->db->like('nama', $query);
             $users = $this->db->get()->result();
-            // foreach ($users as $user) {
-            //     $data = ([
-            //         'id' => $user->id,
-            //         'no_induk' => $user->no_induk,
-            //         'nama' => $user->nama,
-            //         'username' => $user->username,
-            //         'email' => $user->email,
-            //         'phone' => $user->phone,
-            //         'gender' => $user->gender,
-            //         'tempat_lahir' => $user->tempat_lahir,
-            //         'tgl_lahir' => $user->tgl_lahir,
-            //         'alamat' => $user->alamat,
-            //         'user_created' => $user->user_created
-            //     ]);
-            // }
-            return $users;
+            $i = 0;
+            foreach ($users as $user) {
+                $data[$i] = ([
+                    'id' => $user->id,
+                    'no_induk' => $user->no_induk,
+                    'nama' => $user->nama,
+                    'username' => $user->username,
+                    'role' => $user->role,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'gender' => $user->gender,
+                    'tempat_lahir' => $user->tempat_lahir,
+                    'tgl_lahir' => $user->tgl_lahir,
+                    'alamat' => $user->alamat,
+                    'user_created' => $user->user_created
+                ]);
+                $i++;
+            }
+            return $data;
         }
     }
 

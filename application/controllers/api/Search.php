@@ -29,25 +29,9 @@ class Search extends RestController
         }
 
         if ($users) {
-            foreach ($users as $user) {
-                // var_dump($user['id']);
-                $data = ([
-                    'id' => $user->id,
-                    'no_induk' => $user->no_induk,
-                    'nama' => $user->nama,
-                    'username' => $user->username,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    'gender' => $user->gender,
-                    'tempat_lahir' => $user->tempat_lahir,
-                    'tgl_lahir' => $user->tgl_lahir,
-                    'alamat' => $user->alamat,
-                    'user_created' => $user->user_created
-                ]);
-            }
             $this->response([
                 'total_count' => $resultCount,
-                'items' => $data
+                'items' => $users
             ], 200);
         } else {
             $this->response([
