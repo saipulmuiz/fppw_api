@@ -9,10 +9,14 @@ class Search extends RestController
     {
         parent::__construct();
         $this->load->model('Search_model', 'search');
+        $this->load->helper('convert_data');
     }
     public function users_get()
     {
+        $itemsRow = 8;
         $query = $this->get('q');
+        $page = $this->get('page');
+        $resultCount = $this->search->countUsers($query);
         if ($query === null) {
             $this->response([
                 'message' => 'Validation Failed',
@@ -23,21 +27,34 @@ class Search extends RestController
                 ]),
                 'hint' => 'check the url'
             ], 422);
-        } else {
+        } else if ($page === null || $page == "") {
             $users = $this->search->getUsers($query);
-            $resultCount = $this->search->countUsers($query);
+            $totalPages = null;
+            $itemsRow = null;
+        } else {
+            $totalPages = ceil($resultCount / $itemsRow);
+            $offset = ($page - 1) * $itemsRow;
+            $users = $this->search->getUsers($query, $offset, $itemsRow);
         }
 
         if ($users) {
             $this->response([
                 'total_count' => $resultCount,
-                'items' => $users
+                'page' => $page,
+                'per_page' => $itemsRow,
+                'total_pages' => $totalPages,
+                'items' => $users,
             ], 200);
         } else {
-            $this->response([
-                'status' => false,
-                'message' => 'user not found'
-            ], 404);
+            if ($page > $totalPages && $resultCount != 0) {
+                $this->response([
+                    'message' => 'page not found'
+                ], 404);
+            } else {
+                $this->response([
+                    'message' => 'user not found'
+                ], 404);
+            }
         }
     }
 }

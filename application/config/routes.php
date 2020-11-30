@@ -52,4 +52,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-$route['api/users/(:num)'] = 'api/users/index/id/$1';
+$route['api/users/(:any)'] = 'api/users/index/username/$1';
+$route['api/event/(:any)'] = 'api/event/index/eventid/$1';

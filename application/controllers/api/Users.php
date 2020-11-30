@@ -9,17 +9,18 @@ class Users extends RestController
     {
         parent::__construct();
         $this->load->model('User_model', 'user');
+        $this->load->helper('convert_data');
     }
     public function index_get()
     {
-        $id = $this->get('id');
-        if ($id === null) {
+        $username = $this->get('username');
+        if ($username === null) {
             $this->response([
                 'message' => 'Not Found',
                 'hint' => 'try users/{username}'
             ], 404);
         } else {
-            $user = $this->user->getUser($id);
+            $user = $this->user->getUser($username);
         }
 
         if ($user) {
@@ -28,9 +29,11 @@ class Users extends RestController
                 'no_induk' => $user->no_induk,
                 'nama' => $user->nama,
                 'username' => $user->username,
+                'role' => convert_role($user->role),
                 'email' => $user->email,
                 'phone' => $user->phone,
-                'gender' => $user->gender,
+                'gender' => convert_gender($user->gender),
+                'photo' => $user->photo,
                 'tempat_lahir' => $user->tempat_lahir,
                 'tgl_lahir' => $user->tgl_lahir,
                 'alamat' => $user->alamat,
@@ -38,7 +41,7 @@ class Users extends RestController
             ], 200);
         } else {
             $this->response([
-                'message' => 'id not found'
+                'message' => 'username not found'
             ], 404);
         }
     }

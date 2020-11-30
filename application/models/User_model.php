@@ -4,10 +4,10 @@ class User_model extends CI_Model
 {
     public $_table = 'tbl_user';
 
-    public function getUser($id = null)
+    public function getUser($username = null)
     {
-        if ($id !== null) {
-            return $this->db->get_where($this->_table, ['id' => $id])->row();
+        if ($username !== null) {
+            return $this->db->get_where($this->_table, ['username' => $username])->row();
         }
     }
 
